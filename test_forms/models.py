@@ -1,7 +1,7 @@
-from django.db import models
-
 # Create your models here.
 from django.db import models
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
 
 import datetime
 
@@ -46,10 +46,12 @@ class Sect2(models.Model):
     mo_fax = models.CharField(max_length=10)
     mo_email = models.EmailField()
 
-class Test(models.Model):
+class CompleteTest(models.Model):
 
     test_number = models.AutoField(primary_key=True)
-    address = models.CharField(max_length=10000, null=True)
+    address = models.CharField(max_length=10000)
     tdt = models.ForeignKey('TestDateTime', null=True)
     sect1 = models.ForeignKey('Sect1', null=True)
     sect2 = models.ForeignKey('Sect2', null=True)
+
+

@@ -2,6 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 
 # FORM TOOLS imports
 from formtools.wizard.views import SessionWizardView
@@ -10,11 +11,21 @@ from formtools.wizard.views import SessionWizardView
 from . import forms
 from . import models
 
+# complete test
+# Grab address for list view
+class CompleteTestView(FormView):
+    template_name = 'test_forms/section.html'
+    form_class = forms.CompleteTestForm
+
+    def form_valid(self, form):
+
+        return super(CompleteTestView, self).form_valid(form)
+
 # Section 1 view
 class Sect1View(FormView):
     template_name = 'test_forms/section.html'
     form_class = forms.Sect1Form
-    success_url = 'test_forms:sect2'
+    success_url = ''
 
     def form_valid(self, form):
 
@@ -32,8 +43,8 @@ class Sect2View(FormView):
         return super(Sect2View, self).form_valid(form)
 
 # temporary pdf view
-def PDFView(request):
-    return render(request, 'test_forms/pdf.html')
+def TestFormCompleteView(request):
+    return render(request, 'test_forms/test_form_complete.html')
 
 #=========================================================
 #====================== FORM WIZARD ======================   
@@ -67,7 +78,7 @@ class TestWizard(SessionWizardView):
         form_data = process_form_data(form_list)
 
         for form in form_list:
-            if request.method == 'post':
+            if self.request.method == 'post':
                 form = form
                 if form.is_valid():
                     form = form.cleaned_data['form']
@@ -76,6 +87,19 @@ class TestWizard(SessionWizardView):
                     file.write(form.property_address)
                     form.save()
                     return form_list
-        return render_to_response('form_tests/done.html', {'form_data': form_data})
+        return render_to_response('test_forms/test_form_complete.html', {'form_data': form_data})
 
 test_form_wizard_view = TestWizard.as_view(TRANSFER_FORMS)
+
+
+# ADDRESS LIST VIEW
+class AddressListView(ListView):
+    pass
+
+#     model = models.Test
+#     template_name = 'test_forms/address_list.html'
+#     queryset = models.Test.objects.filter(sect1__sect1)
+
+#     def get_context_data(self, **kwargs):
+#         context = super(AddressListView, self).get_context_data(**kwargs)
+#         return context

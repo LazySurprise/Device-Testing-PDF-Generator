@@ -22,12 +22,12 @@ class Sect2Form(forms.ModelForm):
             'title'
         ]
 
-class TestForm(forms.ModelForm):
+class CompleteTestForm(forms.ModelForm):
 
     class Meta:
-        model = models.Test
-        exclude = [
-            'test_number',
+        model = models.CompleteTest
+        fields = [
+            'address'
         ]
 
 class Section1Form(forms.Form):
