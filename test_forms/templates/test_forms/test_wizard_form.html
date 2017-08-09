@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Client Form{% endblock %}
+{% block body %}
+<h1>George Alarm test form</h1>
+<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
+<form method="post">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+    {% if wizard.form.forms %}
+        {{ wizard.form.management_form }}
+        {% for form in wizard.form.forms %}
+            {{ form.as_p }}
+        {% endfor %}
+    {% else %}
+        {{ wizard.form.as_p }}
+    {% endif %}
+    
+    <input type="submit" />
+</form>
+{% endblock %}
