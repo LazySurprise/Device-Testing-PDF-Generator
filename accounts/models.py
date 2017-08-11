@@ -39,7 +39,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=300)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
 
@@ -49,5 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return "@{}".format(self.email)
+
+    def get_short_name(self):
+        return self.email
 
     

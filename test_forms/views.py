@@ -1,8 +1,10 @@
 # DJANGO imports
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import get_object_or_404, render, render_to_response
 from django.views.generic.edit import FormView
-from django.views.generic.list import ListView
+from django.views import generic
 
 # FORM TOOLS imports
 from formtools.wizard.views import SessionWizardView
@@ -14,16 +16,26 @@ from . import models
 # complete test
 # Grab address for list view
 class CompleteTestView(FormView):
-    template_name = 'test_forms/section.html'
+    template_name = 'test_forms/test_wizard_form.html'
     form_class = forms.CompleteTestForm
 
     def form_valid(self, form):
 
         return super(CompleteTestView, self).form_valid(form)
 
+    def post(self):
+        
+        if self.request == 'POST':
+            form = forms.CompleteTestForm(self.request.POST)
+            if form.is_valid():
+                form.save()
+        else:
+            form = forms.CompleteTestForm
+
 # Section 1 view
+
 class Sect1View(FormView):
-    template_name = 'test_forms/section.html'
+    template_name = 'test_forms/test_wizard_form.html'
     form_class = forms.Sect1Form
     success_url = ''
 
@@ -31,10 +43,20 @@ class Sect1View(FormView):
 
         return super(Sect1View, self).form_valid(form)
 
+    def post(self):
+        
+        if self.request == 'POST':
+            form = forms.Sect1Form(self.request.POST)
+            if form.is_valid():
+                form.save()
+        else:
+            form = forms.Sect1Form
+
 
 # Section 2 view
+
 class Sect2View(FormView):
-    template_name = 'test_forms/section.html'
+    template_name = 'test_forms/test_wizard_form.html'
     form_class = forms.Sect2Form
     success_url = ''
 
@@ -42,7 +64,17 @@ class Sect2View(FormView):
 
         return super(Sect2View, self).form_valid(form)
 
+    def post(self):
+        
+        if self.request == 'POST':
+            form = forms.Sect2Form(self.request.POST)
+            if form.is_valid():
+                form.save()
+        else:
+            form = forms.Sect2Form
+
 # temporary pdf view
+
 def TestFormCompleteView(request):
     return render(request, 'test_forms/test_form_complete.html')
 
@@ -50,11 +82,7 @@ def TestFormCompleteView(request):
 #====================== FORM WIZARD ======================   
 #=========================================================
 
-# keep urls clean
-TRANSFER_FORMS = [
-    ("step1", forms.Section1Form),
-    ("step2", forms.Section2Form),
-]
+
 
 # Handle form data
 def process_form_data(form_list):
@@ -63,43 +91,82 @@ def process_form_data(form_list):
 
     return form_data
 
+# KEEP steps CLEAN
+TRANSFER_FORMS = [
+    ("step1", forms.CompleteTestForm),
+    ("step2", forms.Sect1Form),
+    ("step3", forms.Sect2Form)
+]
+
 # Complete Test Form wizard view
-# Handles form when it is complete
+# Handles form when it is complete (done method)
 class TestWizard(SessionWizardView):
 
     # template
     template_name = 'test_forms/test_wizard_form.html'
 
     # list of forms
-    #form_list = [forms.Section1Form, forms.Section2Form]
+    #form_list = []
 
-    def done(self, form_list, **kwargs):
-        
-        form_data = process_form_data(form_list)
+    # SAVE TO DB
+    def done(self, form_list, form_dict, **kwargs):
+        print("done method")
+        complete_test = form_dict['step1'].save()
+        print("address saved")
+        section1 = form_dict['step2'].save()
+        print("sect 1 saved")
+        section2 = form_dict['step3'].save()
+        print("sect 2 saved")
 
-        for form in form_list:
-            if self.request.method == 'post':
-                form = form
-                if form.is_valid():
-                    form = form.cleaned_data['form']
-                    form.save(commit=False)
-                    file = open("new_file", "a+")
-                    file.write(form.property_address)
-                    form.save()
-                    return form_list
-        return render_to_response('test_forms/test_form_complete.html', {'form_data': form_data})
+        return HttpResponseRedirect(reverse('test_form:test-form-complete'))
 
+
+# Add clean steps to form wizard
+# used in urls.py
 test_form_wizard_view = TestWizard.as_view(TRANSFER_FORMS)
 
 
 # ADDRESS LIST VIEW
-class AddressListView(ListView):
-    pass
 
-#     model = models.Test
-#     template_name = 'test_forms/address_list.html'
-#     queryset = models.Test.objects.filter(sect1__sect1)
+class AddressListView(generic.ListView):
+    
+    context_object_name = 'client_list'
+    model = models.CompleteTest
+    queryset = models.CompleteTest.objects.order_by('-address')
+    template_name = 'test_forms/address_list.html'
 
-#     def get_context_data(self, **kwargs):
-#         context = super(AddressListView, self).get_context_data(**kwargs)
-#         return context
+class AddressDetailView(generic.DetailView):
+    
+    model = models.CompleteTest
+
+    template_name = 'test_forms/address_detail.html'
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
