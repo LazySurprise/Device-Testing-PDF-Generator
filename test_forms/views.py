@@ -1,3 +1,6 @@
+# PYTHON imports
+from collections import Counter
+
 # DJANGO imports
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -15,67 +18,102 @@ from . import models
 
 # complete test
 # Grab address for list view
-class CompleteTestView(FormView):
+class CustomerAddressView(FormView):
     template_name = 'test_forms/test_wizard_form.html'
-    form_class = forms.CompleteTestForm
+    form_class = forms.CustomerAddressForm
 
     def form_valid(self, form):
 
-        return super(CompleteTestView, self).form_valid(form)
+        return super(CustomerAddressView, self).form_valid(form)
 
     def post(self):
         
         if self.request == 'POST':
-            form = forms.CompleteTestForm(self.request.POST)
+            form = forms.CustomerAddressForm(self.request.POST)
             if form.is_valid():
                 form.save()
         else:
-            form = forms.CompleteTestForm
+            form = forms.CustomerAddressForm
+
+# inspection form view
+class InspectionFormView(FormView):
+    template_name = 'test_forms/test_wizard_form.html'
+    form_class = forms.InspectionForm
+
+    
+
+    def form_valid(self, form):
+
+        return super(InspectionFormView, self).form_valid(form)
+
+    def post(self):
+        
+        
+        if self.request == 'POST':
+            form = forms.InspectionForm(self.request.POST)
+            if form.is_valid():
+                form.save()
+
+            # try to pre populate
+            #try: 
+             #   address = models.CustomerAddress.objects.get(address=self.request.address)
+                
+ 
+
+
+        else:
+            form = forms.InspectionForm
+
+# inspection form view
+class HiddenInspectionFormView(FormView):
+    template_name = 'test_forms/test_wizard_form.html'
+    form_class = forms.InspectionForm
+
 
 # Section 1 view
 
-class Sect1View(FormView):
+class Section1View(FormView):
     template_name = 'test_forms/test_wizard_form.html'
-    form_class = forms.Sect1Form
+    form_class = forms.Section1Form
     success_url = ''
 
     def form_valid(self, form):
 
-        return super(Sect1View, self).form_valid(form)
+        return super(Section1View, self).form_valid(form)
 
     def post(self):
         
         if self.request == 'POST':
-            form = forms.Sect1Form(self.request.POST)
+            form = forms.Section1Form(self.request.POST)
             if form.is_valid():
                 form.save()
         else:
-            form = forms.Sect1Form
+            form = forms.Section1Form
 
 
 # Section 2 view
 
-class Sect2View(FormView):
+class Section2View(FormView):
     template_name = 'test_forms/test_wizard_form.html'
-    form_class = forms.Sect2Form
+    form_class = forms.Section2Form
     success_url = ''
 
     def form_valid(self, form):
 
-        return super(Sect2View, self).form_valid(form)
+        return super(Section2View, self).form_valid(form)
 
     def post(self):
         
         if self.request == 'POST':
-            form = forms.Sect2Form(self.request.POST)
+            form = forms.Section2Form(self.request.POST)
             if form.is_valid():
                 form.save()
         else:
-            form = forms.Sect2Form
+            form = forms.Section2Form
 
 # temporary pdf view
 
-def TestFormCompleteView(request):
+def CompleteFormView(request):
     return render(request, 'test_forms/test_form_complete.html')
 
 #=========================================================
@@ -93,9 +131,9 @@ def process_form_data(form_list):
 
 # KEEP steps CLEAN
 TRANSFER_FORMS = [
-    ("step1", forms.CompleteTestForm),
-    ("step2", forms.Sect1Form),
-    ("step3", forms.Sect2Form)
+    ("step1", forms.InspectionForm),
+    ("step2", forms.Section1FormPreFill),
+    ("step3", forms.Section2Form)
 ]
 
 # Complete Test Form wizard view
@@ -111,7 +149,39 @@ class TestWizard(SessionWizardView):
     # SAVE TO DB
     def done(self, form_list, form_dict, **kwargs):
         print("done method")
-        complete_test = form_dict['step1'].save()
+        print("address saved")
+        inspection = form_dict['step1'].save()
+        print("address saved")
+        section1 = form_dict['step2'].save()
+        print("sect 1 saved")
+        section2 = form_dict['step3'].save()
+        print("sect 2 saved")
+
+        return HttpResponseRedirect(reverse('test_form:complete-form'))
+
+
+# Add clean steps to form wizard
+# used in urls.py
+test_form_wizard_view = TestWizard.as_view(TRANSFER_FORMS)
+
+NEW_TEST_TRANSFER_FORMS = [
+    ("step1", forms.CustomerAddressForm),
+    ("step2", forms.Section1Form),
+    ("step3", forms.Section2Form)
+]
+
+class NewAddressTestWizard(SessionWizardView):
+
+    # template
+    template_name = 'test_forms/test_wizard_form.html'
+
+    # list of forms
+    #form_list = []
+
+    # SAVE TO DB
+    def done(self, form_list, form_dict, **kwargs):
+        print("done method")
+        customer_address = form_dict['step1'].save()
         print("address saved")
         section1 = form_dict['step2'].save()
         print("sect 1 saved")
@@ -123,7 +193,7 @@ class TestWizard(SessionWizardView):
 
 # Add clean steps to form wizard
 # used in urls.py
-test_form_wizard_view = TestWizard.as_view(TRANSFER_FORMS)
+new_test_form_wizard_view = TestWizard.as_view(NEW_TEST_TRANSFER_FORMS)
 
 
 # ADDRESS LIST VIEW
@@ -131,15 +201,28 @@ test_form_wizard_view = TestWizard.as_view(TRANSFER_FORMS)
 class AddressListView(generic.ListView):
     
     context_object_name = 'client_list'
-    model = models.CompleteTest
-    queryset = models.CompleteTest.objects.order_by('-address')
+    model = models.CustomerAddress
+    queryset = models.CustomerAddress.objects.all()
     template_name = 'test_forms/address_list.html'
 
-class AddressDetailView(generic.DetailView):
-    
-    model = models.CompleteTest
+    #def get_queryset(self):
+     #   return models.CompleteTest.objects.values_list('address', flat=True).distinct()
+        
+            
+class TestListView(generic.ListView):
 
-    template_name = 'test_forms/address_detail.html'
+    context_object_name = 'inspection_list'
+    model = models.Inspection
+    queryset = models.Inspection.objects.all()
+    template_name = 'test_forms/test_list.html'
+
+#class AddressDetailView(generic.DetailView):
+    
+ #   model = models.CompleteTest
+
+  #  template_name = 'test_forms/address_detail.html'
+
+
 
     
 

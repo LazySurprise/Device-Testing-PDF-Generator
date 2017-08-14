@@ -133,6 +133,8 @@ STATIC_URL = '/static/'
 # Custom user model
 AUTH_USER_MODEL = "accounts.User"
 
+LOGIN_REDIRECT_URL = 'test_form:test_form_wizard_view'
+
 
 
 # REST FRAMEWORK custom settings

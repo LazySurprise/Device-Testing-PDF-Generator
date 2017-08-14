@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>tests</h1>
+<h3><a href="{% url 'test_form:test_form_wizard_view'  %}">New test (Where you would go to prepopulate form)</a><h3>
+    <ul>
+        {% for inspection in inspection_list %}
+            
+            <li><a href="#">{{ inspection.inspection_date }}</a></li>
+            
+        {% empty %}
+            <li>No tests yet.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

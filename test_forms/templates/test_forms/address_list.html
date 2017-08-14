@@ -3,7 +3,8 @@
 <h1>Addresses</h1>
     <ul>
         {% for client in client_list %}
-            <li><a href="{% url 'test_form:address-detail' client.slug %}">{{ client.address }}</a></li>
+            
+            <li><a href="{% url 'test_form:test-list' client.slug %}">{{ client.address }}</a></li>
             
         {% empty %}
             <li>No articles yet.</li>
