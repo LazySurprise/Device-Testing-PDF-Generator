@@ -34,9 +34,10 @@ class RelatedFieldWidgetCanAdd(widgets.Select):
             (self.related_url, name))
         output.append(u'<img src="%sadmin/img/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.STATIC_URL, ('Add New Address')))                                                                                                                               
         return mark_safe(u''.join(output))
+
 #===========================================================================
 
-class CustomerAddressForm(forms.ModelForm):
+class NewCustomerAddressForm(forms.ModelForm):
 
     class Meta:
         model = models.CustomerAddress
@@ -44,62 +45,59 @@ class CustomerAddressForm(forms.ModelForm):
             'address',
         ]
 
-class InspectionForm(forms.ModelForm):
+#===========================================================================
+
+class CustomerAddressForm(forms.ModelForm):
 
     address = forms.ModelChoiceField(
        required=True,
        queryset=models.CustomerAddress.objects.all(),
        widget=RelatedFieldWidgetCanAdd(models.CustomerAddress)
-                                )
+    )
+
     class Meta:
-       model = models.Inspection
-       fields = ('address',)
+        model = models.CustomerAddress
+        fields = [
+            'address',
+        ]
+
+# class InspectionForm(forms.ModelForm):
+
+#     address = forms.ModelChoiceField(
+#        required=True,
+#        queryset=models.CustomerAddress.objects.all(),
+#        widget=RelatedFieldWidgetCanAdd(models.CustomerAddress)
+#     )
+
+#     class Meta:
+#        model = models.Inspection
+#        fields = ('address',)
 
 class Section1Form(forms.ModelForm):
 
     class Meta:
         model = models.Section1
         exclude = [
-            'inspection',
-            'ts1_number'
+            'address',
+            'inspection_number',
+            'inspection_date',
+            'inspection_time',
+            'slug'
         ]
 
 
-class Section1FormPreFill(forms.ModelForm):
-
-    class Meta:
-        model = models.Section1
-        exclude = [
-            'inspection',
-            'ts1_number'
-        ]
-
-    def __init__(self, *args, **kwargs):
-            # Get 'initial' argument if any
-        initial_arguments = kwargs.get('initial', None)
-        updated_initial = {}
-        if initial_arguments:
-            # We have initial arguments, fetch 'user' placeholder variable if any
-            address = initial_arguments.get('',None)
-            # Now update the form's initial values if user
-            if user:
-                updated_initial['property_name'] = getattr(address, 'property_name', None)
-                updated_initial['property_address'] = getattr(address, 'property_address', None)
-            # You can also initialize form fields with hardcoded values
-            # or perform complex DB logic here to then perform initialization
-        #updated_initial['comment'] = 'Please provide a comment'
-            # Finally update the kwargs initial reference
-        kwargs.update(initial=updated_initial)
-        super(Section1FormPreFill, self).__init__(*args, **kwargs)
-    
+ 
 
 class Section2Form(forms.ModelForm):
 
     class Meta:
         model = models.Section2
         exclude = [
-            'inspection',
-            'ts2_number',
+            'address',
+            'inspection_number',
+            'inspection_date',
+            'inspection_time',
+            'slug'
         ]
 
 

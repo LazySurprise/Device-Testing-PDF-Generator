@@ -2,46 +2,50 @@
 import datetime
 import os
 import io
+import subprocess
 from os.path import join as pjoin
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
 
-def write_on_pdf(property_name, property_info, istc_info,
-                 system_description, circuit_pathways,
-                 alarm_devices):
+def write_on_pdf(section1=[], section2=[]):
+    print('function accessed')
     # READ ENTIRE PDF
     pdf_reader = PdfFileReader(open('test_form.pdf', 'rb'))
+    print('file opened')
     # GET NUMBER OF PAGES
     num_pages = pdf_reader.getNumPages()
+    print('num_pages: ', num_pages)
     # CREATE PDF WRITER
     output = PdfFileWriter()
 
     # LOOP THROUGH ALL PAGES
     for page in range(0, num_pages):
-
+        print('for loop')
         # CHECK FOR PAGE
         if page == 0:
-
+            print('if')
             # CREATE READABLE STREAM FROM BYTES LIKE OBJECT
             packet = io.BytesIO()
+            print('packets')
             
             # Create NEW PAGE
             can = canvas.Canvas(packet, pagesize=letter)
+            print('can')
 
             # WRITE ON PAGE
-            can.drawString(325, 605, 'property_name')
-            can.drawString(308, 588, 'property_address')
-            can.drawString(325, 572, 'property_description')
-            can.drawString(296, 555, 'occupancy_type')
-            can.drawString(302, 537, 'rep_name')
-            can.drawString(300, 521, 'rep_address')
-            can.drawString(137, 505, 'rep_phone')
-            can.drawString(265, 505, 'rep_fax')
-            can.drawString(410, 505, 'rep_email') 
-            can.drawString(300, 487, 'authority_jurisdiction')
-            can.drawString(137, 470, 'aj_phone')
+            can.drawString(325, 605, section1[4])
+            can.drawString(308, 588, section1[5])
+            can.drawString(325, 572, section1[6])
+            can.drawString(296, 555, section1[7])
+            can.drawString(302, 537, section1[8])
+            can.drawString(300, 521, section1[9])
+            can.drawString(137, 505, section1[10])
+            can.drawString(265, 505, section1[11])
+            can.drawString(410, 505, section1[12]) 
+            can.drawString(300, 487, section1[13])
+            can.drawString(137, 470, section1[14])
 
             # second part of form
     
@@ -89,7 +93,7 @@ def write_on_pdf(property_name, property_info, istc_info,
             can.drawString(171, 99, check_list[6])
             can.drawString(237, 99, check_list[7]) 
             can.drawString(292, 99, check_list[8])'''
-
+            print('draw')
             # SAVE OUR INPUT FOR PDF
             can.save()
 
@@ -104,7 +108,7 @@ def write_on_pdf(property_name, property_info, istc_info,
             page_merge_1.mergePage(report_pdf.getPage(0))
             # LAYOUT OG PAGE
             output.addPage(page_merge_1)
-            
+            print('page 1 done')
             
         # CHECK FOR PAGE
         elif page == 1:
@@ -115,32 +119,32 @@ def write_on_pdf(property_name, property_info, istc_info,
             # INPUT FOR PAGE 2
             can1 = canvas.Canvas(packet, pagesize=letter)
 
-            can1.drawString(170, 690, 'property_name')
-            can1.drawString(430, 690, 'property_address')
-            can1.drawString(255, 653, 'property_description')
-            can1.drawString(492, 653, 'occupancy_type')
-            can1.drawString(376, 632, 'X')
-            can1.drawString(87, 596, 'X')
-            can1.drawString(87, 579, 'X')
-            can1.drawString(231, 579, 'X')
-            can1.drawString(318, 579, 'X')
-            can1.drawString(87, 563, 'X')
-            can1.drawString(305, 563, 'rep_email')
-            can1.drawString(87, 527, 'X')
-            can1.drawString(231, 527, 'X')
-            can1.drawString(376, 527, 'X')
-            can1.drawString(87, 500, 'X')
-            can1.drawString(231, 500, 'X')
-            can1.drawString(376, 500, 'X')
-            can1.drawString(87, 484, 'X')
-            can1.drawString(333, 484, 'X')
-            can1.drawString(87, 467, 'X')
-            can1.drawString(305, 468, 'property_address')
-            can1.drawString(87, 431, 'X')
-            can1.drawString(387, 415, 'property_address')
-            can1.drawString(318, 395, 'X')
-            can1.drawString(400, 379, 'aj_fax')
-            can1.drawString(250, 363, 'aj_email')
+            can1.drawString(170, 690, section1[4])
+            can1.drawString(430, 690, section1[5])
+            can1.drawString(255, 653, section1[6])
+            can1.drawString(492, 653, section1[7])
+            can1.drawString(376, 632, section1[8])
+            can1.drawString(87, 596, section1[9])
+            can1.drawString(87, 579, section1[10])
+            can1.drawString(231, 579, section1[11])
+            can1.drawString(318, 579, section1[12])
+            can1.drawString(87, 563, section1[13])
+            can1.drawString(305, 563, section1[14])
+            can1.drawString(87, 527, section1[15])
+            can1.drawString(231, 527, section2[4])
+            can1.drawString(376, 527, section2[4])
+            can1.drawString(87, 500,  section2[5])
+            can1.drawString(231, 500,  section2[6])
+            can1.drawString(376, 500,  section2[7])
+            can1.drawString(87, 484,  section2[8])
+            can1.drawString(333, 484,  section2[9])
+            can1.drawString(87, 467,  section2[10])
+            can1.drawString(305, 468,  section2[11])
+            can1.drawString(87, 431,  section2[12])
+            can1.drawString(387, 415,  section2[13])
+            can1.drawString(318, 395,  section2[14])
+            can1.drawString(400, 379,  section2[15])
+            can1.drawString(250, 363,  section2[15])
             can1.drawString(460, 363, 'aj_email')
             ########
             can1.drawString(87, 345, 'X')
@@ -794,16 +798,16 @@ def write_on_pdf(property_name, property_info, istc_info,
     date = str(datetime.date.today())
     date.replace(' ', '')
 
-    directory = "C:/Users/Connor/Desktop/DesktopAPP/GEORGE ALARM CO/reports/" + 'property_name'
+    directory = "C:/Users/Connor/Desktop/Django/cmm/cmm_venv/pdf_proj/pdf_tests/{}".format(section1[5]) 
     if not os.path.exists(directory):
         os.makedirs(directory)
             
-    file_name = property_name + '_' + date + '.pdf'
+    file_name = section1[5] + '_' + date + '.pdf'
     path_to_file = pjoin(directory, file_name)
+    print('path_to_file: ', path_to_file)
     path_to_file.replace('"/"', '"\\"')
     outputStream = open(path_to_file, 'ab+')
+    print('outputstream: ', outputStream)
     output.write(outputStream)
     outputStream.close()
-    
-prop_name = 'james_watters'
-write_on_pdf(prop_name)
+

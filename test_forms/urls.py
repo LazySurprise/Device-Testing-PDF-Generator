@@ -8,10 +8,10 @@ from . import forms
 
 urlpatterns = [
 
-    # WIZARD FORM
-    url(r'^new_form/$', views.test_form_wizard_view, name='test_form_wizard_view'),
+    # WIZARD FORM including inspection form
+    #url(r'^new_form/$', views.test_form_wizard_view, name='test_form_wizard_view'),
 
-    # WIZARD FORM
+    # WIZARD FORM FOR NEW ADDRESS
     url(r'^new_address_form/$', views.new_test_form_wizard_view, name='new_test_form_wizard_view'),
 
     # Test Form Complete 
@@ -22,6 +22,9 @@ urlpatterns = [
 
     # Test list
     url(r'^(?P<slug>[\w-]+)/$', views.TestListView.as_view(), name='test-list'),
+
+    # Test list
+    url(r'^(?P<slug>[\w-]+)/new_form/$', views.test_form_wizard_view, name='test_form_wizard_view'),
 
     # Test detail
     #url(r'^(?P<slug>[\w-]+)/$', views.TestDetailView.as_view(), name='test-detail'),
