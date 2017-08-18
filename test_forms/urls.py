@@ -3,16 +3,19 @@ from django.conf.urls import url
 
 # LOCAL APP imports
 from . import views
-from . import forms
+
 
 
 urlpatterns = [
 
-    # WIZARD FORM including inspection form
-    #url(r'^new_form/$', views.test_form_wizard_view, name='test_form_wizard_view'),
-
     # WIZARD FORM FOR NEW ADDRESS
-    url(r'^new_address_form/$', views.new_test_form_wizard_view, name='new_test_form_wizard_view'),
+    url(r'^new_address_form/$', views.IndependentCustomerAddressView.as_view(), name='new-address'),
+
+    # view for creating foreign key relationship
+    url(r'^(?P<slug>[\w-]+)/address_check/$', views.InspectionFormView.as_view(), name='address-check'),
+
+    # New form from new address page
+    url(r'^(?P<slug>[\w-]+)/new_address_inspection/$', views.new_test_form_wizard_view, name='new-address-form'),
 
     # Test Form Complete 
     url(r'^new_form/test_form_complete/$', views.CompleteFormView, name='complete-form'),
@@ -25,12 +28,6 @@ urlpatterns = [
 
     # Test list
     url(r'^(?P<slug>[\w-]+)/new_form/$', views.test_form_wizard_view, name='test_form_wizard_view'),
-
-    # Test detail
-    #url(r'^(?P<slug>[\w-]+)/$', views.TestDetailView.as_view(), name='test-detail'),
-
-    
-
-    
+   
 
 ]

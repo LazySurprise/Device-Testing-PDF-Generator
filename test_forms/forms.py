@@ -15,7 +15,7 @@ from django.conf import settings
 
 class RelatedFieldWidgetCanAdd(widgets.Select):
 
-    def __init__(self, related_model, related_url='test_form:new_test_form_wizard_view', *args, **kw):
+    def __init__(self, related_model, related_url='test_form:new-address', *args, **kw):
 
         super(RelatedFieldWidgetCanAdd, self).__init__(*args, **kw)
 
@@ -45,6 +45,21 @@ class NewCustomerAddressForm(forms.ModelForm):
             'address',
         ]
 
+# ==========================================================================
+
+class InspectionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Inspection
+        fields = [
+           'customer_address',
+        ]
+
+    # the request is now available, add it to the instance data
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(InspectionForm, self).__init__(*args, **kwargs)
+
 #===========================================================================
 
 class CustomerAddressForm(forms.ModelForm):
@@ -61,45 +76,169 @@ class CustomerAddressForm(forms.ModelForm):
             'address',
         ]
 
-# class InspectionForm(forms.ModelForm):
+    # def __init__(self, *args, **kwargs):
+    #     super(models.CustomerAddress, self.).save(**kwargs)
+    #     inspection = models.Inspection(customer_address=self)
+    #     inspection.save()
+    
 
-#     address = forms.ModelChoiceField(
-#        required=True,
-#        queryset=models.CustomerAddress.objects.all(),
-#        widget=RelatedFieldWidgetCanAdd(models.CustomerAddress)
-#     )
-
-#     class Meta:
-#        model = models.Inspection
-#        fields = ('address',)
 
 class Section1Form(forms.ModelForm):
 
     class Meta:
         model = models.Section1
         exclude = [
-            'address',
-            'inspection_number',
-            'inspection_date',
-            'inspection_time',
-            'slug'
+            'inspection',
         ]
-
-
- 
 
 class Section2Form(forms.ModelForm):
 
     class Meta:
         model = models.Section2
         exclude = [
-            'address',
-            'inspection_number',
-            'inspection_date',
-            'inspection_time',
-            'slug'
+            'inspection',
         ]
 
+class Section3Form(forms.ModelForm):
 
+    class Meta:
+        model = models.Section3
+        exclude = [
+            'inspection',
+        ]
 
-    
+class Section4_1Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section4_1
+        exclude = [
+            'inspection',
+        ]
+
+class Section4_2Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section4_2
+        exclude = [
+            'inspection',
+        ]
+
+class Section5Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section5
+        exclude = [
+            'inspection',
+        ]
+
+class Section6Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section6
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_1Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_1
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_2Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_2
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_3Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_3
+        exclude = [
+            'inspection',
+        ]  
+
+class Section7_4Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_4
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_5Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_5
+        exclude = [
+            'inspection',
+        ]
+class Section7_6Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_6
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_7Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_7
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_8Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_8
+        exclude = [
+            'inspection',
+        ]
+
+class Section7_9Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section7_9
+        exclude = [
+            'inspection',
+        ]
+
+class Section8Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section8
+        exclude = [
+            'inspection',
+        ]
+
+class Section9Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section9
+        exclude = [
+            'inspection',
+        ]
+
+class Section10_1Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section10_1
+        exclude = [
+            'inspection',
+        ]
+
+class Section10_2Form(forms.ModelForm):
+
+    class Meta:
+        model = models.Section10_2
+        exclude = [
+            'inspection',
+        ]
+
