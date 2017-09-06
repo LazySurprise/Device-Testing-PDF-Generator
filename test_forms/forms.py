@@ -2,6 +2,7 @@ import itertools
 
 # DJANGO import
 from django import forms
+from django.forms import modelformset_factory
 from django.utils.text import slugify
 
 # LOCAL APP import
@@ -201,6 +202,14 @@ class Section7_8Form(forms.ModelForm):
         exclude = [
             'inspection',
         ]
+
+device_test_formset = modelformset_factory(
+    models.Section7_8,
+    form=Section7_8Form,
+    extra=20,
+    )
+
+#formset = device_test_formset(queryset=models.Section7_8.objects.none())
 
 class Section7_9Form(forms.ModelForm):
 

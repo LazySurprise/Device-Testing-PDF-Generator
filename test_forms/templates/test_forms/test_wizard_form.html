@@ -13,6 +13,9 @@
                     {{ wizard.form.management_form }}
                     {% for form in wizard.form.forms %}
                         {{ form.as_p }}
+                        <table>
+                            {{ formset }}
+                        </table>
                     {% endfor %}
                 {% else %}
                     {{ wizard.form.as_p }}

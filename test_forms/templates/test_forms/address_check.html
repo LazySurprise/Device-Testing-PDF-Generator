@@ -10,20 +10,7 @@
                 <h1>hello</h1>
                 <form method="POST">
                     {% csrf_token %}
-                    {% for form in formset.forms %}
-
-                        {{ form }}
-                    {% endfor %}
-                    <!--{% for i in "123456789123456789123" %}
-                        <p>******************************</p>
-                        <table>
-                        {{ form.management_form }}
-                        
-                        {{ form }}
-                        </table>
-                        <p>******************************</p>
-                    {% endfor %}-->
-                    
+                    {{ form.as_p }}
                     <div class="form-group">
                         <input class="form-control" type="submit" value="Save" />
                     </div>

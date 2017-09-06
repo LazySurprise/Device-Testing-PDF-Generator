@@ -17,6 +17,9 @@ urlpatterns = [
     # New form from new address page
     url(r'^(?P<slug>[\w-]+)/new_address_inspection/$', views.new_test_form_wizard_view, name='new-address-form'),
 
+    # FORMSET view
+    url(r'^(?P<slug>[\w-]+)/device_tests/$', views.DeviceTestFormsetView.as_view(), name='device-tests'),
+
     # Test Form Complete 
     url(r'^new_form/test_form_complete/$', views.CompleteFormView, name='complete-form'),
     

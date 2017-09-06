@@ -5,9 +5,10 @@
         {% for client in client_list %}
             
             <li><a href="{% url 'test_form:test-list' client.slug %}">{{ client.address }}</a></li>
-            <li><a href="{% url 'test_form:test_form_wizard_view' client.slug %}">New form (pre-populated)</a></li>
-            <li><a href="{% url 'test_form:address-check' client.slug %}">New form (no data)</a></li>
-            
+            <ul>
+                <li><a href="{% url 'test_form:test_form_wizard_view' client.slug %}">New form (pre-populated)</a></li>
+                <li><a href="{% url 'test_form:address-check' client.slug %}">New form (no data)</a></li>
+            </ul>
         {% empty %}
             <li>No articles yet.</li>
         {% endfor %}

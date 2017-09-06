@@ -542,12 +542,12 @@ class Section7_8(models.Model):
     )
 
     inspection = models.ForeignKey(Inspection)
-    device_type = models.CharField(max_length=100)
-    device_address = models.CharField(max_length=100)
-    device_inspection_type = models.CharField(max_length=1, choices=INSPECTION_CHOICES)
-    device_inspection_cycle = models.CharField(max_length=5)
-    device_location = models.CharField(max_length=1000)
-    device_test_results = models.CharField(max_length=255)
+    device_type = models.CharField(max_length=100, null=True, blank=True)
+    device_address = models.CharField(max_length=100, null=True, blank=True)
+    device_inspection_type = models.CharField(max_length=1, choices=INSPECTION_CHOICES, null=True, blank=True)
+    device_inspection_cycle = models.CharField(max_length=5, null=True, blank=True)
+    device_location = models.CharField(max_length=1000, null=True, blank=True)
+    device_test_results = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         admin_name = str(self.inspection) + '-section7_8'
