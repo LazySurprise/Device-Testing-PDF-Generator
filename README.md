@@ -1,4 +1,4 @@
-# Repo: Automated Form Filing Application (Generic)
+# Automated Form Filing Application (Generic)
 # Author: Connor Burk
 ### Description: My ever-so-cleverly named application, Device-Testing-PDF-Generator, helped friends reduce redundancy in form-filing by 95%. By querying Django's ORM for data based on customer address and test date, it pre-populates 19 out of the 20 pages in the test document.
 
